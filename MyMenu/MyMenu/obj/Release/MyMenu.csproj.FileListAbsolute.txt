@@ -1,0 +1,4 @@
+F:\C#\MyMenu\MyMenu\bin\Release\MyMenu.dll
+F:\C#\MyMenu\MyMenu\bin\Release\MyMenu.pdb
+F:\C#\MyMenu\MyMenu\obj\Release\MyMenu.dll
+F:\C#\MyMenu\MyMenu\obj\Release\MyMenu.pdb
