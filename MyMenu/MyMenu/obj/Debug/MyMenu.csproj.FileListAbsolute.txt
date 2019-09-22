@@ -8,3 +8,9 @@ F:\C#\MyMenu\MyMenu\bin\Debug\MyMenu.pdb
 F:\C#\MyMenu\MyMenu\obj\Debug\MyMenu.csprojResolveAssemblyReference.cache
 F:\C#\MyMenu\MyMenu\obj\Debug\MyMenu.dll
 F:\C#\MyMenu\MyMenu\obj\Debug\MyMenu.pdb
+F:\GitHub\Libs\MyMenu\MyMenu\bin\Debug\MyMenu.dll
+F:\GitHub\Libs\MyMenu\MyMenu\bin\Debug\MyMenu.pdb
+F:\GitHub\Libs\MyMenu\MyMenu\obj\Debug\MyMenu.csprojAssemblyReference.cache
+F:\GitHub\Libs\MyMenu\MyMenu\obj\Debug\MyMenu.csproj.CoreCompileInputs.cache
+F:\GitHub\Libs\MyMenu\MyMenu\obj\Debug\MyMenu.dll
+F:\GitHub\Libs\MyMenu\MyMenu\obj\Debug\MyMenu.pdb

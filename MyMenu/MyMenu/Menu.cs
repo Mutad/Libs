@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 //
 //  OwO
@@ -86,6 +87,14 @@ namespace MyMenu
             
             public bool waitForReadKey;
 
+            //colors
+            public ConsoleColor foreColor;
+            public ConsoleColor backColor;
+            public ConsoleColor foreColorChoosed;
+            public ConsoleColor backColorChoosed;
+
+            public bool usingNewMenu;
+
             public Settings()
             {
                 waitForReadKey = true;
@@ -96,6 +105,13 @@ namespace MyMenu
                 isHeaderVisible = true;
                 showWrongSymbolException = true;
                 headerText = "Header";
+
+                backColor = ConsoleColor.Black;
+                foreColor = ConsoleColor.White;
+                backColorChoosed = ConsoleColor.White;
+                foreColorChoosed = ConsoleColor.Black;
+
+                usingNewMenu = true;
             }
         }
         public class Events
@@ -109,8 +125,8 @@ namespace MyMenu
             public Action onEndCycle;
 
             //executes function every time when menu start draw
-            public Action onDrawMenuStart;//
-            public Action onDrawMenuEnd;//
+            public Action onDrawMenuStart;
+            public Action onDrawMenuEnd;
 
             public Action onUserChoose;
 
@@ -118,6 +134,11 @@ namespace MyMenu
             {
                 onStart = () => { };
                 onStartCycle = () => { };
+                onEnd = () => { };
+                onEndCycle = () => { };
+                onDrawMenuStart = () => { };
+                onDrawMenuEnd = () => { };
+                onUserChoose = () => { };
             }
         }
 
@@ -197,7 +218,7 @@ namespace MyMenu
             return val;
         }
 
-        public void Start()
+        private void OldMenuStart()
         {
             int choose;
 
@@ -261,5 +282,124 @@ namespace MyMenu
             menuEvents.onEnd();
         }
 
+
+        private void Draw(int choosedMenuItem)
+        {
+            //Set console colors to default colors
+            Console.BackgroundColor = menuSettings.backColor;
+            Console.ForegroundColor = menuSettings.foreColor;
+            //Add header to menu
+            if (menuSettings.isHeaderVisible)
+                Console.WriteLine("\t\t"+menuSettings.headerText);
+
+            //Add view of every element to menu view
+            for (int i = 0; i < elements.Count; i++)
+            {
+                //Check if element is valid
+                if (elements[i].isValid())
+                {
+                    //Check if element is choosen
+                    if (i == choosedMenuItem)
+                    {
+                        //Set console colors to choosen colors
+                        Console.BackgroundColor = menuSettings.backColorChoosed;
+                        Console.ForegroundColor = menuSettings.foreColorChoosed;
+                    }
+
+
+                    if (elements[i].Heading == "")
+                    {
+                        Console.WriteLine(elements[i].Heading);
+                        Console.WriteLine("\t" + elements[i].Content);
+                    }
+                    else
+                    {
+                        Console.WriteLine(elements[i].Content);
+                    }
+
+                    if (i == choosedMenuItem)
+                    {
+                        //Set console colors to default colors
+                        Console.BackgroundColor = menuSettings.backColor;
+                        Console.ForegroundColor = menuSettings.foreColor;
+                    }
+                }
+            }
+        }
+
+        private void NewMenuStart()
+        {
+            bool cycle = true;
+            int choosedMenuItem=0;
+            menuEvents.onStart();
+            do
+            {
+                //start menu cycle
+                menuEvents.onStartCycle();
+
+                //Clear menu
+                if (menuSettings.clearOnStartMenu)
+                    Console.Clear();
+
+
+                menuEvents.onDrawMenuStart();
+                //Draw menu
+                Draw(choosedMenuItem);
+                menuEvents.onDrawMenuEnd();
+
+
+                try
+                {
+                    switch (Console.ReadKey().Key)
+                    {
+                        case ConsoleKey.UpArrow:
+                            choosedMenuItem = choosedMenuItem == 0 ? choosedMenuItem : choosedMenuItem - 1;
+                            break;
+                        case ConsoleKey.DownArrow:
+                            choosedMenuItem = choosedMenuItem == (elements.Count - 1) ? choosedMenuItem : choosedMenuItem + 1;
+                            break;
+                        case ConsoleKey.Enter:
+
+                            elements[choosedMenuItem].Execute();
+                            if (menuSettings.waitForReadKey)
+                                Console.ReadKey(true);
+
+                            break;
+                        case ConsoleKey.Escape:
+                            menuEvents.onEnd();
+                            return;
+                    }
+
+                    menuEvents.onUserChoose();
+                }
+                catch (FormatException)
+                {
+                    if (menuSettings.showWrongSymbolException)
+                    {
+                        Console.WriteLine("You entered wrong symbol");
+                        System.Threading.Thread.Sleep(800);
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("something went wrong");
+                    System.Threading.Thread.Sleep(800);
+                }
+
+                menuEvents.onEndCycle();
+
+            } while (cycle);
+
+            menuEvents.onEnd();
+        }
+
+        public void Start()
+        {
+            if (menuSettings.usingNewMenu)
+                NewMenuStart();
+            else
+                OldMenuStart();
+
+        }
     }
 }
