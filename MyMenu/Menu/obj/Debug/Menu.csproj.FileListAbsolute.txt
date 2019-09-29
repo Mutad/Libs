@@ -1,0 +1,9 @@
+F:\repos\Menu\Menu\bin\Debug\Menu.dll
+F:\repos\Menu\Menu\bin\Debug\Menu.pdb
+F:\repos\Menu\Menu\obj\Debug\Menu.csprojAssemblyReference.cache
+F:\repos\Menu\Menu\obj\Debug\Menu.csproj.CoreCompileInputs.cache
+F:\repos\Menu\Menu\obj\Debug\Menu.dll
+F:\repos\Menu\Menu\obj\Debug\Menu.pdb
+F:\repos\Menu\Menu\bin\Debug\Newtonsoft.Json.dll
+F:\repos\Menu\Menu\bin\Debug\Newtonsoft.Json.xml
+F:\repos\Menu\Menu\obj\Debug\Menu.csproj.CopyComplete
