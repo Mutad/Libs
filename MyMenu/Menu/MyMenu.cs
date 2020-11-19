@@ -204,7 +204,7 @@ namespace MyMenu
     /**
      * Menu class for creating amazing menu
      */
-    public class Menu
+    public class Menu : IView
     {
 
         //Defining variables
@@ -263,6 +263,16 @@ namespace MyMenu
         public void Add(string content, Action function)
         {
             Elements.Add(new Element(Function: function, Content: content));
+        }
+
+        /// <summary>
+        /// Adds new menu element that opens new menu
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="view"></param>
+        public void Add(string content, IView view)
+        {
+            Elements.Add(new Element(Function: () => { view.Open(); }, Content: content));
         }
 
         /// <summary>
