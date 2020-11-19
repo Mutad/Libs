@@ -56,10 +56,6 @@ namespace MyMenu
              */
             public GlobalSettings()
             {
-                Console.WriteLine("Global settings created");
-                System.Threading.Thread.Sleep(1000);
-
-
                 if (File.Exists(filename))
                 {
                     using (FileStream fstream = File.OpenRead(filename))
@@ -99,9 +95,6 @@ namespace MyMenu
              */
             ~GlobalSettings()
             {
-                Console.WriteLine("Saved");
-                System.Threading.Thread.Sleep(1000);
-
                 string text = JsonConvert.SerializeObject(this);
                 using (FileStream fstream = new FileStream(filename, FileMode.OpenOrCreate))
                 {
