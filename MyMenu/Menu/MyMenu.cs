@@ -215,14 +215,14 @@ namespace MyMenu
         public List<IElement> Elements { get; private set; }
 
         /// <summary>
-        ///Variable <c>menuSettings</c> represents the settings of current menu instance
+        ///Variable <c>settings</c> represents the settings of current menu instance
         /// </summary>
-        public Utils.Settings menuSettings;
+        public Utils.Settings settings;
 
         /// <summary>
-        /// Variable <c>menuEvents</c> represents the events of current menu instance
+        /// Variable <c>events</c> represents the events of current menu instance
         /// </summary>
-        public Utils.Events menuEvents;
+        public Utils.Events events;
 
         /// <summary>
         /// Static Variable <c>globalMenuSettings</c> represents the settings of all menu instances
@@ -242,8 +242,8 @@ namespace MyMenu
         public Menu(List<IElement> elements)
         {
             this.Elements = elements;
-            menuSettings = new Utils.Settings();
-            menuEvents = new Utils.Events();
+            settings = new Utils.Settings();
+            events = new Utils.Events();
         }
 
         /// <summary>
@@ -283,8 +283,8 @@ namespace MyMenu
         private void Draw(int choosedMenuItem)
         {
             //Add header to menu
-            if (menuSettings.isHeaderVisible)
-                Console.WriteLine("\t\t" + menuSettings.headerText);
+            if (settings.isHeaderVisible)
+                Console.WriteLine("\t\t" + settings.headerText);
 
             //Iterate through each element in menu
             for (int i = 0; i < Elements.Count; i++)
@@ -320,20 +320,20 @@ namespace MyMenu
         {
             cycle = true;
             int choosedMenuItem = 0;
-            menuEvents.onStart();
+            events.onStart();
             do
             {
                 //start menu cycle
-                menuEvents.onStartCycle();
+                events.onStartCycle();
 
                 //Clear menu
-                if (menuSettings.clearOnStartMenu)
+                if (settings.clearOnStartMenu)
                     Console.Clear();
 
-                menuEvents.onDrawMenuStart();
+                events.onDrawMenuStart();
                 // Draw menu
                 Draw(choosedMenuItem);
-                menuEvents.onDrawMenuEnd();
+                events.onDrawMenuEnd();
 
                 // Get input from user
                 try
@@ -347,20 +347,21 @@ namespace MyMenu
                             choosedMenuItem = choosedMenuItem == (Elements.Count - 1) ? choosedMenuItem : choosedMenuItem + 1;
                             break;
                         case ConsoleKey.Enter:
-                            menuEvents.onUserChoose();
+                            events.onUserChoose();
                             Elements[choosedMenuItem].Execute();
-                            if (menuSettings.waitForReadKey)
+                            if (settings.waitForReadKey)
                                 Console.ReadKey(true);
 
                             break;
                         case ConsoleKey.Escape:
-                            menuEvents.onEnd();
+                            this.Close();
+                            events.onEnd();
                             return;
                     }
                 }
                 catch (FormatException)
                 {
-                    if (menuSettings.showWrongSymbolException)
+                    if (settings.showWrongSymbolException)
                     {
                         Console.WriteLine("You entered wrong symbol");
                         System.Threading.Thread.Sleep(800);
@@ -372,28 +373,23 @@ namespace MyMenu
                     System.Threading.Thread.Sleep(800);
                 }
 
-                menuEvents.onEndCycle();
+                events.onEndCycle();
 
             } while (cycle);
 
-            menuEvents.onEnd();
+            events.onEnd();
         }
 
         public void Close()
         {
             cycle = false;
-        }
-
-        public void CloseNow()
-        {
-            cycle = false;
-            this.menuSettings.waitForReadKey = false;
+            this.settings.waitForReadKey = false;
         }
 
         /// <summary>
         /// Starts menu
         /// </summary>
-        public void Start()
+        public void Open()
         {
             if (Elements.Count > 0)
             {
